@@ -271,38 +271,8 @@ a{color:inherit}
 .pass ul{list-style:none; margin:18px 0 0; padding:0; display:grid; gap:8px; flex:1}
 .pass li{display:flex; gap:10px; font-size:.94rem; color:var(--ink-2); padding-top:8px; border-top:1px solid var(--rule)}
 .pass li::before{content:"+"; color:var(--signal); font-family:var(--util); flex:none}
-.selectbtn{
-  margin-top:20px; width:100%; appearance:none; cursor:pointer; text-align:center;
-  font-family:var(--util); font-size:11px; letter-spacing:.13em; text-transform:uppercase;
-  padding:12px 18px; border-radius:100px; border:1px solid var(--rule-2);
-  background:transparent; color:var(--ink); transition:background .2s, color .2s, border-color .2s;
-}
-.selectbtn:hover{border-color:var(--ink)}
-.pass[data-sel="true"] .selectbtn{background:var(--ink); color:var(--ground); border-color:var(--ink)}
-.pass.gone{opacity:.62}
-.pass.gone .selectbtn{cursor:not-allowed}
+.pass.gone{opacity:.72}
 .flag{position:absolute; top:20px; right:22px; font-family:var(--util); font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--mf); border:1px solid currentColor; border-radius:100px; padding:2px 9px}
-
-.order{
-  margin-top:24px; border:1px solid var(--rule-2); border-radius:5px; background:var(--ground-3);
-  padding:22px 24px; display:grid; grid-template-columns:1.3fr auto auto auto; gap:24px; align-items:center;
-}
-.order .lbl{font-family:var(--util); font-size:9.5px; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3); display:block; margin-bottom:6px}
-.order .val{font-family:var(--sans); font-weight:600; font-size:1.02rem}
-.order .val.num{font-family:var(--util); font-variant-numeric:tabular-nums; font-weight:400; font-size:1.02rem}
-.qty{display:flex; align-items:center; border:1px solid var(--rule-2); border-radius:100px; overflow:hidden}
-.qty button{
-  appearance:none; cursor:pointer; background:transparent; border:0; color:var(--ink);
-  font-family:var(--util); font-size:15px; line-height:1; padding:9px 14px;
-}
-.qty button:hover{background:var(--ground-2)}
-.qty span{font-family:var(--util); font-size:14px; font-variant-numeric:tabular-nums; min-width:22px; text-align:center}
-.order .total{font-family:var(--display); font-size:2.2rem; line-height:1; font-variant-numeric:tabular-nums}
-.ordermsg{
-  grid-column:1 / -1; margin:0; padding-top:16px; border-top:1px solid var(--rule);
-  font-family:var(--util); font-size:10px; letter-spacing:.11em; text-transform:uppercase; color:var(--signal);
-}
-.ordermsg[hidden]{display:none}
 
 /* ============================================================
    VENUE STRIP + FAQ
@@ -351,7 +321,6 @@ a{color:inherit}
   .factbar .wrap{grid-template-columns:1fr 1fr}
   .shows{grid-template-columns:1fr}
   .passes{grid-template-columns:1fr}
-  .order{grid-template-columns:1fr 1fr; gap:20px}
   .foot .wrap{grid-template-columns:1fr 1fr}
   .faq{grid-template-columns:1fr}
 }
@@ -363,7 +332,6 @@ a{color:inherit}
   .mnav{display:none}
   .masthead .wrap{gap:14px}
   .mark{font-size:19px}
-  .order{grid-template-columns:1fr}
   .foot .wrap{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion: reduce){
@@ -700,7 +668,6 @@ a{color:inherit}
           <li>Standing room at both stages</li>
           <li>Daylight ring and letterpress broadsheet</li>
         </ul>
-        <button class="selectbtn" type="button">Select · $89</button>
       </article>
 
       <article class="pass" id="pass-gold" data-pass="Gold" data-price="259" data-sel="true">
@@ -714,7 +681,6 @@ a{color:inherit}
           <li>One autograph token</li>
           <li>Priority booking on both escape rooms</li>
         </ul>
-        <button class="selectbtn" type="button">Select · $259</button>
       </article>
 
       <article class="pass gone" id="pass-founders" data-pass="Founders" data-price="549" data-gone="1">
@@ -729,36 +695,10 @@ a{color:inherit}
           <li>Reserved floor at the Miss Mystic Falls Ball</li>
           <li>A numbered daylight ring, engraved</li>
         </ul>
-        <button class="selectbtn" type="button" disabled>Join the waitlist</button>
       </article>
     </div>
 
-    <div class="order" id="order">
-      <div>
-        <span class="lbl">Your order</span>
-        <span class="val" id="o-pass">Gold · both days</span>
-      </div>
-      <div>
-        <span class="lbl">Tickets</span>
-        <div class="qty">
-          <button type="button" id="q-minus" aria-label="Fewer tickets">–</button>
-          <span id="q-n">1</span>
-          <button type="button" id="q-plus" aria-label="More tickets">+</button>
-        </div>
-      </div>
-      <div>
-        <span class="lbl">Subtotal + fees</span>
-        <span class="val num" id="o-sub">$259.00 + $8.50</span>
-      </div>
-      <div>
-        <span class="lbl">Total</span>
-        <span class="total" id="o-total">$267.50</span>
-      </div>
-      <div style="grid-column:1 / -1">
-        <button class="btn" type="button" id="checkout" style="width:auto">Continue to checkout</button>
-      </div>
-      <p class="ordermsg" id="ordermsg" hidden>Online ticketing is not live. No payment has been taken.</p>
-    </div>
+    <p class="note-line">Under sixteens free with a paying adult · companion passes free at the access desk · booking fee charged once per order, not per pass</p>
   </div>
 </section>
 
@@ -877,58 +817,6 @@ a{color:inherit}
     cd.s.textContent = pad(s % 60);
   }
   tick(); setInterval(tick, 1000);
-
-  /* ---------- Pass selection + order summary ---------- */
-  var FEE = 8.5;
-  var passes = Array.prototype.slice.call(document.querySelectorAll(".pass"));
-  var qN = document.getElementById("q-n");
-  var oPass = document.getElementById("o-pass");
-  var oSub = document.getElementById("o-sub");
-  var oTotal = document.getElementById("o-total");
-  var msg = document.getElementById("ordermsg");
-  var selected = document.getElementById("pass-gold");
-  var qty = 1;
-
-  function money(n){
-    return "$" + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-  }
-  function render(){
-    var price = Number(selected.getAttribute("data-price"));
-    var name = selected.getAttribute("data-pass");
-    var span = name === "General" ? "single day" : "both days";
-    var sub = price * qty;
-    oPass.textContent = name + " · " + span;
-    qN.textContent = String(qty);
-    oSub.textContent = money(sub) + " + " + money(FEE);
-    oTotal.textContent = money(sub + FEE);
-    passes.forEach(function(p){
-      var on = p === selected;
-      p.setAttribute("data-sel", on ? "true" : "false");
-      if (p.getAttribute("data-gone")) return;
-      var b = p.querySelector(".selectbtn");
-      b.setAttribute("aria-pressed", on ? "true" : "false");
-      b.textContent = on ? "Selected" : "Select · $" + p.getAttribute("data-price");
-    });
-    msg.hidden = true;
-  }
-  passes.forEach(function(p){
-    var btn = p.querySelector(".selectbtn");
-    btn.addEventListener("click", function(){
-      if (p.getAttribute("data-gone")) return;
-      selected = p;
-      render();
-    });
-  });
-  document.getElementById("q-plus").addEventListener("click", function(){
-    if (qty < 8) { qty++; render(); }
-  });
-  document.getElementById("q-minus").addEventListener("click", function(){
-    if (qty > 1) { qty--; render(); }
-  });
-  document.getElementById("checkout").addEventListener("click", function(){
-    msg.hidden = false;
-  });
-  render();
 
   /* ---------- Scroll reveal ---------- */
   var targets = document.querySelectorAll(".show, .act, .pass, .venue div");
